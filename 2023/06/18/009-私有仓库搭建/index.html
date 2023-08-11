@@ -1,0 +1,339 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>私有仓库搭建 | My Little Pony</title><meta name="author" content="My Little Pony"><meta name="copyright" content="My Little Pony"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="MAVEN私有仓库搭建1.docker安装1.Set up the repository Update the apt package index and install packages to allow apt to use a repository over HTTPS: 12$ sudo apt-get update$ sudo apt-get install ca-certificate">
+<meta property="og:type" content="article">
+<meta property="og:title" content="私有仓库搭建">
+<meta property="og:url" content="http://example.com/2023/06/18/009-%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="My Little Pony">
+<meta property="og:description" content="MAVEN私有仓库搭建1.docker安装1.Set up the repository Update the apt package index and install packages to allow apt to use a repository over HTTPS: 12$ sudo apt-get update$ sudo apt-get install ca-certificate">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://c-ssl.duitang.com/uploads/item/202004/07/20200407114728_AvmAL.jpeg">
+<meta property="article:published_time" content="2023-06-18T14:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-11T02:04:26.040Z">
+<meta property="article:author" content="My Little Pony">
+<meta property="article:tag" content="仓库搭建">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://c-ssl.duitang.com/uploads/item/202004/07/20200407114728_AvmAL.jpeg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/06/18/009-%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '私有仓库搭建',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-11 10:04:26'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/universe.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://c-ssl.duitang.com/uploads/item/202004/07/20200407114728_AvmAL.jpeg')"><nav id="nav"><span id="blog-info"><a href="/" title="My Little Pony"><span class="site-name">My Little Pony</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 档案</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">私有仓库搭建</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-06-18T14:00:00.000Z" title="发表于 2023-06-18 22:00:00">2023-06-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-11T02:04:26.040Z" title="更新于 2023-08-11 10:04:26">2023-08-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/java/">java</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/java/maven/">maven</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="私有仓库搭建"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="MAVEN私有仓库搭建"><a href="#MAVEN私有仓库搭建" class="headerlink" title="MAVEN私有仓库搭建"></a>MAVEN私有仓库搭建</h1><h2 id="1-docker安装"><a href="#1-docker安装" class="headerlink" title="1.docker安装"></a>1.docker安装</h2><h4 id="1-Set-up-the-repository"><a href="#1-Set-up-the-repository" class="headerlink" title="1.Set up the repository"></a>1.Set up the repository</h4><ol>
+<li><p>Update the <code>apt</code> package index and install packages to allow <code>apt</code> to use a repository over HTTPS:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get update</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get install ca-certificates curl gnupg</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Add Docker’s official GPG key:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo install -m 0755 -d /etc/apt/keyrings</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo <span class="built_in">chmod</span> a+r /etc/apt/keyrings/docker.gpg</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Use the following command to set up the repository:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> \</span></span><br><span class="line"><span class="language-bash">  <span class="string">&quot;deb [arch=&quot;</span>$(dpkg --print-architecture)<span class="string">&quot; signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \</span></span></span><br><span class="line"><span class="string"><span class="language-bash">  &quot;</span>$(. /etc/os-release &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$VERSION_CODENAME</span>&quot;</span>)<span class="string">&quot; stable&quot;</span> | \</span></span><br><span class="line"><span class="language-bash">  sudo <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Note</strong></p>
+<p>If you use an Ubuntu derivative distro, such as Linux Mint, you may need to use <code>UBUNTU_CODENAME</code> instead of <code>VERSION_CODENAME</code>.</p>
+</blockquote>
+</li>
+<li><p>Update the <code>apt</code> package index:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get update</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="2-Install-Docker-Engine"><a href="#2-Install-Docker-Engine" class="headerlink" title="2.Install Docker Engine"></a>2.Install Docker Engine</h4><ol>
+<li><p>Install Docker Engine, containerd, and Docker Compose.</p>
+<ul>
+<li>Latest</li>
+<li>Specific version</li>
+</ul>
+<p>To install the latest version, run:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+</li>
+<li><p>Verify that the Docker Engine installation is successful by running the <code>hello-world</code> image.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo docker run hello-world</span></span><br></pre></td></tr></table></figure>
+
+<p>This command downloads a test image and runs it in a container. When the container runs, it prints a confirmation message and exits.</p>
+</li>
+</ol>
+<p>You have now successfully installed and started Docker Engine.</p>
+<h4 id="3-配置加速镜像"><a href="#3-配置加速镜像" class="headerlink" title="3.配置加速镜像"></a>3.配置加速镜像</h4><p>&#x2F;etc&#x2F;docker 下新建daemon.json，内容为：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;registry-mirrors&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line"><span class="string">&quot;https://ung2thfc.mirror.aliyuncs.com&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="string">&quot;https://registry.docker-cn.com&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="string">&quot;http://hub-mirror.c.163.com&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span></span><br><span class="line"><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>加载重启docker:</p>
+<p>在终端输入以下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<p>输入sudo docker info,显示如下内容说明配置成功：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Registry Mirrors<span class="punctuation">:</span></span><br><span class="line"> https<span class="punctuation">:</span><span class="comment">//ung2thfc.mirror.aliyuncs.com/</span></span><br><span class="line"> https<span class="punctuation">:</span><span class="comment">//registry.docker-cn.com/</span></span><br><span class="line"> http<span class="punctuation">:</span><span class="comment">//hub-mirror.c.163.com/</span></span><br><span class="line"> https<span class="punctuation">:</span><span class="comment">//docker.mirrors.ustc.edu.cn/</span></span><br><span class="line">Live Restore Enabled<span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-NEXUS安装启动"><a href="#2-NEXUS安装启动" class="headerlink" title="2.NEXUS安装启动"></a>2.NEXUS安装启动</h2><h4 id="1-安装nexus"><a href="#1-安装nexus" class="headerlink" title="1.安装nexus"></a>1.安装nexus</h4><p>进入docker官网搜索nexus</p>
+<p><a target="_blank" rel="noopener" href="http://hub.docker.com/">http://hub.docker.com/</a></p>
+<p>安装最新版本</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull sonatype/nexus3</span><br></pre></td></tr></table></figure>
+
+<p>本版本为：Docker version 24.0.2, build cb74dfc。</p>
+<p>安装完成后，运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker images</span><br></pre></td></tr></table></figure>
+
+<p>显示如下内容表示安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">REPOSITORY        TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">sonatype/nexus3   latest    067a3887b789   2 weeks ago    551MB</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-启动（此处有坑）"><a href="#2-启动（此处有坑）" class="headerlink" title="2.启动（此处有坑）"></a>2.启动（此处有坑）</h4><p>输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo docker run -d -p 8081:8081 --name nexus sonatype/nexus3</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>$ docker run</code>: 这是用于在 Docker 中运行容器的命令。</p>
+</li>
+<li><p><code>-d</code>: 这是一个选项，表示容器以后台（detached）模式运行，即容器在后台运行而不会占用当前终端。</p>
+</li>
+<li><p><code>-p 8081:8081</code>: 这也是一个选项，用于将主机（Host）端口 8081 映射到容器内部的端口 8081。这是为了让外部可以通过主机的 8081 端口访问容器内运行的 Nexus 仓库。</p>
+</li>
+<li><p><code>--name nexus</code>: 这是为容器指定一个名称，即 “nexus”。</p>
+</li>
+<li><p><code>sonatype/nexus3</code>: 这是容器的镜像名称，它指定了要运行的镜像，即 Sonatype Nexus 3 仓库管理系统的官方镜像。</p>
+</li>
+</ul>
+<p>网页中可显示<a target="_blank" rel="noopener" href="http://localhost:8081/%E7%9A%84%E5%86%85%E5%AE%B9%E8%AF%B4%E6%98%8E%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%EF%BC%9B">http://localhost:8081/的内容说明启动成功；</a></p>
+<p>或者运行如下语句有内容也可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker ps</span><br></pre></td></tr></table></figure>
+
+
+
+<p>&#x2F;<strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>此处有坑</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>*&#x2F;</p>
+<p>如果硬盘容量小，采用创建目录再挂载的方式，会无法启动。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span>  /home/dockerimages/nexus/nexus-data &amp;&amp; <span class="built_in">chown</span> -R 200  /home/dockerimages/nexus/nexus-data</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 8081:8081 --name nexus -v /home/dockerimages/nexus/nexus-data:/nexus-data  sonatype/nexus3</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-登录"><a href="#3-登录" class="headerlink" title="3.登录"></a>3.登录</h4><p>初始的管理员密码存储在 <code>/nexus-data/admin.password</code> 文件中。</p>
+<p>首先，使用以下命令进入运行中的 Nexus 容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker <span class="built_in">exec</span> -it nexus /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>这将在容器内部打开一个交互式终端。</p>
+<p>然后，可以使用 cat 命令来查看 <code>/nexus-data/admin.password</code> 文件的内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /nexus-data/admin.password</span><br></pre></td></tr></table></figure>
+
+
+
+<p>登录成功向导选择：</p>
+<p>Enable anonymous access means that by default, users can search, browse and download components from repositories without credentials. Please consider the security implications for your organization.</p>
+<p>Disable anonymous access should be chosen with care, as it will require credentials for all users and&#x2F;or build tools.</p>
+<p>More information<br>o-Enable anonymous access<br>o-Disable anonymous access</p>
+<ul>
+<li><strong>Enable anonymous access（启用匿名访问）：</strong> 当启用匿名访问时，用户无需提供任何凭据就可以搜索、浏览和下载仓库中的组件。这意味着任何人都可以访问仓库中的内容，而不需要进行身份验证。这对于公开的或共享的仓库可能是有用的，但也会带来安全风险，因为任何人都可以访问。</li>
+<li><strong>Disable anonymous access（禁用匿名访问）：</strong> 当禁用匿名访问时，所有用户和构建工具都需要提供凭据才能访问仓库。这增加了安全性，但也可能增加了访问仓库所需的复杂性，因为每个用户都需要有有效的凭据才能访问。</li>
+</ul>
+<h4 id="4-Nexus-仓库分类"><a href="#4-Nexus-仓库分类" class="headerlink" title="4.Nexus 仓库分类"></a>4.Nexus 仓库分类</h4><p>本小节可跳过。</p>
+<p>Nexus 仓库按照类型（Type）区分，主要分为以下 3 个类型：</p>
+<ul>
+<li><strong>Hosted Repository（托管仓库）：</strong> 托管仓库是一个本地存储库，用于存储内部或第三方的构建和依赖项。这些仓库通常用于存储你自己的构建产物、第三方库、框架等。它们可以被当作 Maven、npm、NuGet 等构建工具的存储库。托管仓库允许你在内部维护构建和依赖项，以便团队成员可以快速访问它们，而不必每次都从外部下载。</li>
+<li><strong>Proxy Repository（代理仓库）：</strong> 代理仓库用于缓存公共远程存储库中的构建和依赖项。例如，Maven Central、npm Registry 等远程存储库。代理仓库能够在第一次请求构建或依赖项时从远程存储库下载，并将其缓存在本地。这可以减少构建时的网络延迟，提高构建的速度，并且在远程存储库不可用时仍然提供可靠的依赖项。</li>
+<li><strong>Group Repository（组合仓库）：</strong> 组合仓库将多个托管仓库和代理仓库组合成一个逻辑单元。它提供了一个统一的入口点，使团队可以在构建工具中只配置一个仓库地址。当一个构建工具搜索依赖项时，组合仓库会按照预定义的顺序依次检查每个仓库，直到找到所需的依赖项。这样，你可以将内部托管仓库和外部代理仓库结合起来，使构建过程更加高效和方便。</li>
+</ul>
+<p>为了更加直观的理解仓库组、代理仓库和宿主仓库的概念，我们通过下图展示它们的用途和区别。</p>
+<p><img src="http://c.biancheng.net/uploads/allimg/210706/1HQ31000-1.png" alt="Nexus 仓库分类"></p>
+<p>图2： Nexus仓库分类</p>
+<p>由上图可知：</p>
+<ul>
+<li>Maven 可以直接从宿主仓库中下载构件。</li>
+<li>Maven 也可以从代理仓库中下载构件，代理仓库会从远程仓库下载并缓存构件。</li>
+<li>Maven 还可以从仓库组中下载构件，仓库组会从其包含的宿主仓库和代理仓库中获取构件。</li>
+</ul>
+<h2 id="3-构建仓库"><a href="#3-构建仓库" class="headerlink" title="3.构建仓库"></a>3.构建仓库</h2><h4 id="1-配置文件"><a href="#1-配置文件" class="headerlink" title="1.配置文件"></a>1.配置文件</h4><p>在本地maven的setting.xml中，找到 <servers>标签，添加：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">server</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>yixunMaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">username</span>&gt;</span>admin<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">password</span>&gt;</span>123<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">server</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>填写登录到nexus的账号密码，id保证在 <servers>标签中唯一。</p>
+<p>在准备打包成jar项目的pom.xml中添加：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">distributionManagement</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>yixunMaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://localhost:8081/repository/maven-releases/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">snapshotRepository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>yixunMaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://192.168.245.131:8081/repository/maven-snapshots/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">snapshotRepository</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">distributionManagement</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><repository>对应release版本，        <snapshotRepository>对应snapshots版本</p>
+<p>其中<id>yixunMaven</id>需要保持一致，<url></url>为上传地址，可从nexus页面复制。</p>
+<p><strong><strong><strong><strong><strong><strong>注意</strong></strong></strong></strong></strong></strong>：</p>
+<p>如果选择<repository>,则需要修改一个属性：</p>
+<p>Hosted<br>Controls if deployments of and updates to artifacts are allowed</p>
+<p>Disable redeploy—&gt;Allow redeploy</p>
+<p><img src="https://xiangpeitop.oss-cn-chengdu.aliyuncs.com/blogimgs/image-20221217125540079.png" alt="image-20221217125540079"></p>
+<p>设置为<code>Allow redeploy</code>代表允许我们对仓库中的依赖维护升级新版本，如果设置为<code>disable redeploy</code>意味着我们无法将升级版本上传上来。</p>
+<h4 id="2-上传依赖"><a href="#2-上传依赖" class="headerlink" title="2.上传依赖"></a>2.上传依赖</h4><p>maven—&gt; lifecycle—&gt;deploy</p>
+<p><img src="C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20230810161301761.png" alt="image-20230810161301761"></p>
+<p>上传完成：</p>
+<p><img src="C:\Users\User\AppData\Roaming\Typora\typora-user-images\image-20230810162241266.png" alt="image-20230810162241266"></p>
+<h4 id="3-拉取依赖"><a href="#3-拉取依赖" class="headerlink" title="3.拉取依赖"></a>3.拉取依赖</h4><p>接下来，配置本地maven。</p>
+<p>还是打开<code>setting.xml</code>，找到<code>mirrors</code>标签。</p>
+<p>然后添加一个<code>mirror</code>标签：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>yixunMaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>一迅网络私有仓库<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://192.168.245.131:8081/repository/maven-public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>之前阿里的镜像可以注释了，此处  <url><a target="_blank" rel="noopener" href="http://localhost:8081/repository/maven-public/">http://localhost:8081/repository/maven-public/</a></url>是仓库组的地址。</p>
+<p>添加的镜像：</p>
+<ul>
+<li>id 之前server的id，访问仓库组也要拿用户名密码</li>
+<li>mirrorOf *代表所有的依赖都从私服找</li>
+<li>url 就是仓库组的，还是去仓库组右边copy即可</li>
+</ul>
+<p>到这里就能使用私服下载依赖了：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.example<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>SpringBootdemo<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="4-注意"><a href="#4-注意" class="headerlink" title="4.注意"></a>4.注意</h2><h4 id="1-关于nexus代理仓库状态"><a href="#1-关于nexus代理仓库状态" class="headerlink" title="1.关于nexus代理仓库状态"></a>1.关于nexus代理仓库状态</h4><p><img src="https://xiangpeitop.oss-cn-chengdu.aliyuncs.com/blogimgs/image-20221217131805013.png" alt="image-20221217131805013"></p>
+<p><code>online-remote available </code>表示该被代理仓库可用</p>
+<p><code>online-ready to connect</code>并不是代理仓库用不了。而是你根本还没有一个依赖去访问这个被代理仓库，nexus也不知道这个被代理仓库能不能用，所以它只能展示为待连接状态：</p>
+<p><img src="https://xiangpeitop.oss-cn-chengdu.aliyuncs.com/blogimgs/image-20221217132103203.png" alt="image-20221217132103203"></p>
+<p>该配置：表示代理仓库会根据每次请求被代理仓库的响应来决定是否暂停请求这个被代理仓库，请求无响应就会block。</p>
+<p><img src="https://xiangpeitop.oss-cn-chengdu.aliyuncs.com/blogimgs/image-20221217133404847.png" alt="image-20221217133404847"></p>
+<p>还有一个Blocked选项，直接阻止，相当于禁用该代理仓库。一般选择auto就行了。</p>
+<p>所以<code> online-ready to connect</code>并不是仓库出现了问题。</p>
+<p>新建的代理仓库都是<code> online-ready to connect</code>状态。</p>
+<h4 id="2-maven配置中还是加上阿里镜像仓库"><a href="#2-maven配置中还是加上阿里镜像仓库" class="headerlink" title="2.maven配置中还是加上阿里镜像仓库"></a>2.maven配置中还是加上阿里镜像仓库</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyunmaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>阿里云公共仓库<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://maven.aliyun.com/repository/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>yixunMaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>一迅网络私有仓库<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://192.168.245.131:8081/repository/maven-public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">My Little Pony</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/06/18/009-%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/">http://example.com/2023/06/18/009-%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">My Little Pony</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/">仓库搭建</a><a class="post-meta__tags" href="/tags/linux/">linux</a></div><div class="post_share"><div class="social-share" data-image="https://c-ssl.duitang.com/uploads/item/202004/07/20200407114728_AvmAL.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/05/18/008-%E5%BC%80%E5%8F%91%E6%9E%B6%E6%9E%84%E4%BD%93%E7%B3%BB/" title="开发架构体系"><img class="cover" src="https://gss0.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/a50f4bfbfbedab64dd1668b8f136afc379311e65.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">开发架构体系</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">My Little Pony</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="/mlpTwilight" target="_blank" title="weixin"><i class="fa-brands fa-weixin"></i></a><a class="social-icon" href="/964334545" target="_blank" title="qq"><i class="fa-brands fa-qq"></i></a><a class="social-icon" href="https://github.com/mlppinkie" target="_blank" title="github"><i class="fab fa-github"></i></a><a class="social-icon" href="/c964334545@163.com" target="_blank" title="envelope"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">嗯，我是喜欢晴天！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MAVEN%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">MAVEN私有仓库搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-docker%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">1.docker安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Set-up-the-repository"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">1.Set up the repository</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Install-Docker-Engine"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">2.Install Docker Engine</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E5%8A%A0%E9%80%9F%E9%95%9C%E5%83%8F"><span class="toc-number">1.1.0.3.</span> <span class="toc-text">3.配置加速镜像</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-NEXUS%E5%AE%89%E8%A3%85%E5%90%AF%E5%8A%A8"><span class="toc-number">1.2.</span> <span class="toc-text">2.NEXUS安装启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85nexus"><span class="toc-number">1.2.0.1.</span> <span class="toc-text">1.安装nexus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8%EF%BC%88%E6%AD%A4%E5%A4%84%E6%9C%89%E5%9D%91%EF%BC%89"><span class="toc-number">1.2.0.2.</span> <span class="toc-text">2.启动（此处有坑）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%99%BB%E5%BD%95"><span class="toc-number">1.2.0.3.</span> <span class="toc-text">3.登录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-Nexus-%E4%BB%93%E5%BA%93%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.0.4.</span> <span class="toc-text">4.Nexus 仓库分类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9E%84%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="toc-number">1.3.</span> <span class="toc-text">3.构建仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">1.配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%B8%8A%E4%BC%A0%E4%BE%9D%E8%B5%96"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">2.上传依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%8B%89%E5%8F%96%E4%BE%9D%E8%B5%96"><span class="toc-number">1.3.0.3.</span> <span class="toc-text">3.拉取依赖</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%B3%A8%E6%84%8F"><span class="toc-number">1.4.</span> <span class="toc-text">4.注意</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%85%B3%E4%BA%8Enexus%E4%BB%A3%E7%90%86%E4%BB%93%E5%BA%93%E7%8A%B6%E6%80%81"><span class="toc-number">1.4.0.1.</span> <span class="toc-text">1.关于nexus代理仓库状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-maven%E9%85%8D%E7%BD%AE%E4%B8%AD%E8%BF%98%E6%98%AF%E5%8A%A0%E4%B8%8A%E9%98%BF%E9%87%8C%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93"><span class="toc-number">1.4.0.2.</span> <span class="toc-text">2.maven配置中还是加上阿里镜像仓库</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/06/18/009-%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/" title="私有仓库搭建"><img src="https://c-ssl.duitang.com/uploads/item/202004/07/20200407114728_AvmAL.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="私有仓库搭建"/></a><div class="content"><a class="title" href="/2023/06/18/009-%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E6%90%AD%E5%BB%BA/" title="私有仓库搭建">私有仓库搭建</a><time datetime="2023-06-18T14:00:00.000Z" title="发表于 2023-06-18 22:00:00">2023-06-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/18/008-%E5%BC%80%E5%8F%91%E6%9E%B6%E6%9E%84%E4%BD%93%E7%B3%BB/" title="开发架构体系"><img src="https://gss0.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/a50f4bfbfbedab64dd1668b8f136afc379311e65.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="开发架构体系"/></a><div class="content"><a class="title" href="/2023/05/18/008-%E5%BC%80%E5%8F%91%E6%9E%B6%E6%9E%84%E4%BD%93%E7%B3%BB/" title="开发架构体系">开发架构体系</a><time datetime="2023-05-18T14:00:00.000Z" title="发表于 2023-05-18 22:00:00">2023-05-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/05/15/007-TCP_IP%20%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%90%84%E5%B1%82%E7%9A%84%E4%BB%A3%E8%A1%A8%E5%8D%8F%E8%AE%AE/" title="TCP/IP 五层模型以及各层的代表协议"><img src="https://pic3.zhimg.com/v2-1e2d1cde6149ec0ef1669370a046aab2_r.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TCP/IP 五层模型以及各层的代表协议"/></a><div class="content"><a class="title" href="/2023/05/15/007-TCP_IP%20%E4%BA%94%E5%B1%82%E6%A8%A1%E5%9E%8B%E4%BB%A5%E5%8F%8A%E5%90%84%E5%B1%82%E7%9A%84%E4%BB%A3%E8%A1%A8%E5%8D%8F%E8%AE%AE/" title="TCP/IP 五层模型以及各层的代表协议">TCP/IP 五层模型以及各层的代表协议</a><time datetime="2023-05-15T14:00:00.000Z" title="发表于 2023-05-15 22:00:00">2023-05-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/17/006-%E8%8B%A5%E4%BE%9Dvue%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/" title="RuoYi-Vue 二次开发"><img src="https://ts1.cn.mm.bing.net/th/id/R-C.449f2777035c409de6b4f50486204949?rik=hjXnpzQmeNK2Fg&amp;riu=http%3a%2f%2fimg.pconline.com.cn%2fimages%2fupload%2fupc%2ftx%2fwallpaper%2f1307%2f30%2fc0%2f23934263_1375169304679.jpg&amp;ehk=vEntSKc0FY5eeV5RbO0u38mFK3MO3nDYcD%2b8uHELZfU%3d&amp;risl=&amp;pid=ImgRaw&amp;r=0" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RuoYi-Vue 二次开发"/></a><div class="content"><a class="title" href="/2023/04/17/006-%E8%8B%A5%E4%BE%9Dvue%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/" title="RuoYi-Vue 二次开发">RuoYi-Vue 二次开发</a><time datetime="2023-04-17T02:46:17.000Z" title="发表于 2023-04-17 10:46:17">2023-04-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/13/005-Netty-%E4%BC%98%E5%8C%96%E4%B8%8E%E6%BA%90%E7%A0%81/" title="Netty优化与源码"><img src="https://images.wallpaperscraft.com/image/single/girl_umbrella_anime_151317_1280x720.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Netty优化与源码"/></a><div class="content"><a class="title" href="/2023/04/13/005-Netty-%E4%BC%98%E5%8C%96%E4%B8%8E%E6%BA%90%E7%A0%81/" title="Netty优化与源码">Netty优化与源码</a><time datetime="2023-04-13T07:23:17.000Z" title="发表于 2023-04-13 15:23:17">2023-04-13</time></div></div></div></div></div></div></main><footer id="footer" style="background: true img"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By My Little Pony</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><script src="/js/jquery.min.js"></script><script src="/js/fishes.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
